@@ -16,3 +16,4 @@ C:\Users\Ahmet\source\repos\GoodbyeAhmet\obj\Debug\net8.0-windows\ref\GoodbyeAhm
 C:\Users\Ahmet\source\repos\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.Properties.Resources.resources
 C:\Users\Ahmet\source\repos\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.About.resources
 C:\Users\Ahmet\source\repos\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.Main.resources
+C:\Users\Ahmet\source\repos\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.sourcelink.json

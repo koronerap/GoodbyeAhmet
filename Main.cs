@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 
 namespace GoodbyeAhmet
 {
@@ -8,12 +9,59 @@ namespace GoodbyeAhmet
 
         private static string APP_PATH_64 = Application.StartupPath + @"essentials\goodbyedpi\x86_64\goodbyedpi.exe";
         private static string APP_PATH_32 = Application.StartupPath + @"essentials\goodbyedpi\x86\goodbyedpi.exe";
+        private static string SAVE_FILE_PATH = "preferences";
 
         private static string APP_PATH => Environment.Is64BitProcess ? APP_PATH_64 : APP_PATH_32;
 
         public Main()
         {
             InitializeComponent();
+
+            presetsComboBox.Items.Clear();
+
+            presetsComboBox.SelectedIndexChanged += PresetsComboBox_SelectedIndexChanged;
+
+            foreach(var preset in Presets.presets)
+                presetsComboBox.Items.Add(preset.Name);
+
+            Load();
+        }
+
+        private void PresetsComboBox_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (presetsComboBox.SelectedIndex < 0) return;
+            ApplyPreset(Presets.presets[presetsComboBox.SelectedIndex]);
+            Save();
+        }
+
+        private void Load()
+        {
+            if (File.Exists(SAVE_FILE_PATH))
+            {
+                string text = File.ReadAllText(SAVE_FILE_PATH);
+
+                if(int.TryParse(text, out int preset))
+                    presetsComboBox.SelectedIndex = preset;
+            }
+            else
+            {
+                presetsComboBox.SelectedIndex = 0;
+            }
+        }
+
+        private void Save()
+        {
+            File.WriteAllText(SAVE_FILE_PATH,presetsComboBox.SelectedIndex.ToString());
+        }
+
+        private void ApplyPreset(Preset preset)
+        {
+            modesetTextBox.Text = preset.Modeset;
+            ttlTextBox.Text = preset.TTL;
+            dnsV4AddressTextBox.Text = preset.DNSV4Address;
+            dnsV4PortTextBox.Text = preset.DNSV4Port;
+            dnsV6AddressTextBox.Text = preset.DNSV6Address;
+            dnsV6PortTextBox.Text = preset.DNSV6Port;
         }
 
         private void launchButton_Click(object sender, EventArgs e)
@@ -31,13 +79,29 @@ namespace GoodbyeAhmet
                 CreateNoWindow = true,
             };
 
-            string arguments = $"{modesetTextBox.Text} " +
-                $"--dns-addr {dnsV4AddressTextBox.Text} " +
-                $"--dns-port {dnsV4PortTextBox.Text} " +
-                $"--dnsv6-addr {dnsV6AddressTextBox.Text} " +
-                $"--dnsv6-port {dnsV6PortTextBox.Text}";
+            StringBuilder arguments = new StringBuilder();
 
-            startInfo.Arguments = arguments;
+            if (modesetTextBox.Text.Length > 0)
+                arguments.Append($"{modesetTextBox.Text} ");
+
+            if(ttlTextBox.Text.Length > 0)
+                arguments.Append($"--set-ttl {ttlTextBox.Text} ");
+
+            if (dnsV4AddressTextBox.Text.Length > 0)
+                arguments.Append($"--dns-addr {dnsV4AddressTextBox.Text} ");
+
+            if (dnsV4PortTextBox.Text.Length > 0)
+                arguments.Append($"--dns-port {dnsV4PortTextBox.Text} ");
+
+            if (dnsV6AddressTextBox.Text.Length > 0)
+                arguments.Append($"--dnsv6-addr {dnsV6AddressTextBox.Text} ");
+
+            if (dnsV6PortTextBox.Text.Length > 0)
+                arguments.Append($"--dnsv6-port {dnsV6PortTextBox.Text}");
+
+            string args = arguments.ToString().Trim();
+
+            startInfo.Arguments = args;
 
             try
             {
