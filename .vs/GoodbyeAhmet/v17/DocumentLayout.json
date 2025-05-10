@@ -7,10 +7,6 @@
       "RelativeMoniker": "D:0:0:{8D5202BA-6FDC-473D-958D-68F49251014C}|GoodbyeAhmet.csproj|solutionrelative:main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8D5202BA-6FDC-473D-958D-68F49251014C}|GoodbyeAhmet.csproj|c:\\users\\ahmet\\source\\repos\\goodbyeahmet\\presets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8D5202BA-6FDC-473D-958D-68F49251014C}|GoodbyeAhmet.csproj|solutionrelative:presets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8D5202BA-6FDC-473D-958D-68F49251014C}|GoodbyeAhmet.csproj|c:\\users\\ahmet\\source\\repos\\goodbyeahmet\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{8D5202BA-6FDC-473D-958D-68F49251014C}|GoodbyeAhmet.csproj|solutionrelative:main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
@@ -22,21 +18,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Presets.cs",
-              "DocumentMoniker": "C:\\Users\\Ahmet\\source\\repos\\GoodbyeAhmet\\Presets.cs",
-              "RelativeDocumentMoniker": "Presets.cs",
-              "ToolTip": "C:\\Users\\Ahmet\\source\\repos\\GoodbyeAhmet\\Presets.cs",
-              "RelativeToolTip": "Presets.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAiwAsAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-31T17:48:01.639Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -45,21 +28,21 @@
               "RelativeDocumentMoniker": "Main.cs",
               "ToolTip": "C:\\Users\\Ahmet\\source\\repos\\GoodbyeAhmet\\Main.cs",
               "RelativeToolTip": "Main.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAIwAAAAAAAAAAAAYwJoAAABVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-31T17:46:29.575Z",
+              "WhenOpened": "2025-04-29T08:59:16.24Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Main.cs [Tasar\u0131m]",
               "DocumentMoniker": "C:\\Users\\Ahmet\\source\\repos\\GoodbyeAhmet\\Main.cs",
               "RelativeDocumentMoniker": "Main.cs",
               "ToolTip": "C:\\Users\\Ahmet\\source\\repos\\GoodbyeAhmet\\Main.cs [Tasar\u0131m]",
               "RelativeToolTip": "Main.cs [Tasar\u0131m]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-31T17:46:26.101Z",
+              "WhenOpened": "2025-04-29T08:59:10.144Z",
               "EditorCaption": " [Tasar\u0131m]"
             }
           ]

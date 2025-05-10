@@ -4,6 +4,9 @@
     <Compile Update="About.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="ConnectionSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Main.cs">
       <SubType>Form</SubType>
     </Compile>

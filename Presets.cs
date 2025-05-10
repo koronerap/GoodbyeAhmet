@@ -65,6 +65,25 @@ namespace GoodbyeAhmet
                 DNSV6Port = "",
                 Blacklist = "",
             },
+            new Preset()
+            {
+                Name = "Russia",
+                Modeset = "-5",
+                TTL = "",
+                DNSV4Address = "",
+                DNSV4Port = "",
+                DNSV6Address = "",
+                DNSV6Port = "",
+                Blacklist = "",
+            },
+        };
+
+        public static List<Blacklist> blacklists = new List<Blacklist> {
+            new Blacklist()
+            {
+                Name = "Russia",
+                URL = "https://antizapret.prostovpn.org/domains-export.txt",
+            }
         };
     }
 
@@ -78,5 +97,12 @@ namespace GoodbyeAhmet
         public string DNSV6Address { get; set; }
         public string DNSV6Port { get; set; }
         public string Blacklist { get; set; }
+
+    }
+
+    public class Blacklist
+    {
+        public string Name { get; set; }
+        public string URL { get; set; }
     }
 }

@@ -9,66 +9,36 @@ namespace GoodbyeAhmet
 
         private static string APP_PATH_64 = Application.StartupPath + @"essentials\goodbyedpi\x86_64\goodbyedpi.exe";
         private static string APP_PATH_32 = Application.StartupPath + @"essentials\goodbyedpi\x86\goodbyedpi.exe";
-        private static string SAVE_FILE_PATH = "preferences";
 
         private static string APP_PATH => Environment.Is64BitProcess ? APP_PATH_64 : APP_PATH_32;
+
+        private bool firstLaunch = true;
 
         public Main()
         {
             InitializeComponent();
 
-            presetsComboBox.Items.Clear();
-
-            presetsComboBox.SelectedIndexChanged += PresetsComboBox_SelectedIndexChanged;
-
-            foreach(var preset in Presets.presets)
-                presetsComboBox.Items.Add(preset.Name);
-
-            Load();
+            Settings.Load();
+            Application.ApplicationExit += Application_ApplicationExit;
         }
 
-        private void PresetsComboBox_SelectedIndexChanged(object? sender, EventArgs e)
+        private void Application_ApplicationExit(object? sender, EventArgs e)
         {
-            if (presetsComboBox.SelectedIndex < 0) return;
-            ApplyPreset(Presets.presets[presetsComboBox.SelectedIndex]);
-            Save();
+            KillProcesses();
+            Trace.WriteLine("app exit");
         }
 
-        private void Load()
-        {
-            if (File.Exists(SAVE_FILE_PATH))
-            {
-                string text = File.ReadAllText(SAVE_FILE_PATH);
-
-                if(int.TryParse(text, out int preset))
-                    presetsComboBox.SelectedIndex = preset;
-            }
-            else
-            {
-                presetsComboBox.SelectedIndex = 0;
-            }
-        }
-
-        private void Save()
-        {
-            File.WriteAllText(SAVE_FILE_PATH,presetsComboBox.SelectedIndex.ToString());
-        }
-
-        private void ApplyPreset(Preset preset)
-        {
-            modesetTextBox.Text = preset.Modeset;
-            ttlTextBox.Text = preset.TTL;
-            dnsV4AddressTextBox.Text = preset.DNSV4Address;
-            dnsV4PortTextBox.Text = preset.DNSV4Port;
-            dnsV6AddressTextBox.Text = preset.DNSV6Address;
-            dnsV6PortTextBox.Text = preset.DNSV6Port;
-        }
-
-        private void launchButton_Click(object sender, EventArgs e)
+        private void Launch()
         {
             if (!File.Exists(APP_PATH))
             {
                 MessageBox.Show($"Goodbye DPI not found at:\n{APP_PATH}!");
+                return;
+            }
+
+            if (Settings.Data == null)
+            {
+                MessageBox.Show($"Settings couldn't be loaded!");
                 return;
             }
 
@@ -81,23 +51,23 @@ namespace GoodbyeAhmet
 
             StringBuilder arguments = new StringBuilder();
 
-            if (modesetTextBox.Text.Length > 0)
-                arguments.Append($"{modesetTextBox.Text} ");
+            if (Settings.Data.Modeset.Length > 0)
+                arguments.Append($"{Settings.Data.Modeset} ");
 
-            if(ttlTextBox.Text.Length > 0)
-                arguments.Append($"--set-ttl {ttlTextBox.Text} ");
+            if (Settings.Data.TTL.Length > 0)
+                arguments.Append($"--set-ttl {Settings.Data.TTL} ");
 
-            if (dnsV4AddressTextBox.Text.Length > 0)
-                arguments.Append($"--dns-addr {dnsV4AddressTextBox.Text} ");
+            if (Settings.Data.V4Address.Length > 0)
+                arguments.Append($"--dns-addr {Settings.Data.V4Address} ");
 
-            if (dnsV4PortTextBox.Text.Length > 0)
-                arguments.Append($"--dns-port {dnsV4PortTextBox.Text} ");
+            if (Settings.Data.V4Port.Length > 0)
+                arguments.Append($"--dns-port {Settings.Data.V4Port} ");
 
-            if (dnsV6AddressTextBox.Text.Length > 0)
-                arguments.Append($"--dnsv6-addr {dnsV6AddressTextBox.Text} ");
+            if (Settings.Data.V6Address.Length > 0)
+                arguments.Append($"--dnsv6-addr {Settings.Data.V6Address} ");
 
-            if (dnsV6PortTextBox.Text.Length > 0)
-                arguments.Append($"--dnsv6-port {dnsV6PortTextBox.Text}");
+            if (Settings.Data.V6Port.Length > 0)
+                arguments.Append($"--dnsv6-port {Settings.Data.V6Port}");
 
             string args = arguments.ToString().Trim();
 
@@ -106,9 +76,12 @@ namespace GoodbyeAhmet
             try
             {
                 process = Process.Start(startInfo);
-                
+
+                Trace.WriteLine($"App started with arguments: {arguments}");
+
                 Hide();
                 notifyIcon.Visible = true;
+                notifyIcon.ShowBalloonTip(3000, "Information", "Goodbye Ahmet is now active.", ToolTipIcon.Info);
             }
             catch (System.ComponentModel.Win32Exception)
             {
@@ -117,11 +90,14 @@ namespace GoodbyeAhmet
             }
         }
 
+        private void launchButton_Click(object sender, EventArgs e)
+        {
+            Launch();
+        }
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            process?.Kill();
-            process?.Close();
-            process?.Dispose();
+            KillProcesses();
         }
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -129,11 +105,71 @@ namespace GoodbyeAhmet
             Application.Exit();
         }
 
+        private void KillProcesses()
+        {
+            try
+            {
+                var processes = Process.GetProcessesByName("goodbyedpi");
+
+                foreach (var p in processes)
+                {
+                    try
+                    {
+                        if (!p.HasExited)
+                            p.Kill();
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine($"Process {p.Id} kill error: {ex.Message}");
+                    }
+
+                    try
+                    {
+                        p.Close();
+                        p.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine($"Process {p.Id} cleanup error: {ex.Message}");
+                    }
+                }
+
+                if (process != null && !process.HasExited)
+                {
+                    try
+                    {
+                        process.Kill();
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine($"Main process kill error: {ex.Message}");
+                    }
+
+                    try
+                    {
+                        process.Close();
+                        process.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine($"Main process cleanup error: {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"KillProcesses genel hata: {ex.Message}");
+            }
+        }
+
+
         private void resetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            process?.Kill();
-            process?.Close();
-            process?.Dispose();
+            KillProcesses();
+
+            WindowState = FormWindowState.Maximized;
+            ShowInTaskbar = true;
+
             Show();
             launchButton.Enabled = true;
         }
@@ -141,6 +177,32 @@ namespace GoodbyeAhmet
         private void aboutButton_Click(object sender, EventArgs e)
         {
             new About().ShowDialog();
+        }
+
+        private void settingsButton_Click(object sender, EventArgs e)
+        {
+            new ConnectionSettings().ShowDialog();
+        }
+
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+            if (!firstLaunch) return;
+            firstLaunch = false;
+
+            if (Settings.Data == null) return;
+            if (Settings.Data.LaunchOnStart)
+            {
+                WindowState = FormWindowState.Minimized;
+                ShowInTaskbar = false;
+
+                BeginInvoke(new MethodInvoker(delegate
+                {
+                    Hide();
+                }));
+
+                Launch();
+            }
         }
     }
 }

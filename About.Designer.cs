@@ -35,6 +35,8 @@
             label3 = new Label();
             linkLabel2 = new LinkLabel();
             label4 = new Label();
+            label5 = new Label();
+            linkLabel3 = new LinkLabel();
             SuspendLayout();
             // 
             // label1
@@ -78,9 +80,9 @@
             label3.Location = new Point(10, 88);
             label3.Name = "label3";
             label3.Padding = new Padding(0, 15, 0, 0);
-            label3.Size = new Size(135, 30);
+            label3.Size = new Size(154, 30);
             label3.TabIndex = 4;
-            label3.Text = "GoodbyeAhmet GitHub:";
+            label3.Text = "GoodbyeDPI-Turkey GitHub";
             // 
             // linkLabel2
             // 
@@ -88,10 +90,10 @@
             linkLabel2.Dock = DockStyle.Top;
             linkLabel2.Location = new Point(10, 118);
             linkLabel2.Name = "linkLabel2";
-            linkLabel2.Size = new Size(257, 15);
+            linkLabel2.Size = new Size(279, 15);
             linkLabel2.TabIndex = 5;
             linkLabel2.TabStop = true;
-            linkLabel2.Text = "https://github.com/koronerap/GoodbyeAhmet";
+            linkLabel2.Text = "https://github.com/cagritaskn/GoodbyeDPI-Turkey";
             linkLabel2.VisitedLinkColor = Color.Blue;
             linkLabel2.LinkClicked += linkLabel2_LinkClicked;
             // 
@@ -99,19 +101,44 @@
             // 
             label4.AutoSize = true;
             label4.Dock = DockStyle.Top;
-            label4.Location = new Point(10, 133);
+            label4.Location = new Point(10, 178);
             label4.Name = "label4";
             label4.Padding = new Padding(0, 15, 0, 0);
             label4.Size = new Size(175, 30);
             label4.TabIndex = 6;
             label4.Text = "Project Logo by Ainul Muttakin.";
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Dock = DockStyle.Top;
+            label5.Location = new Point(10, 133);
+            label5.Name = "label5";
+            label5.Padding = new Padding(0, 15, 0, 0);
+            label5.Size = new Size(135, 30);
+            label5.TabIndex = 7;
+            label5.Text = "GoodbyeAhmet GitHub:";
+            // 
+            // linkLabel3
+            // 
+            linkLabel3.AutoSize = true;
+            linkLabel3.Dock = DockStyle.Top;
+            linkLabel3.Location = new Point(10, 163);
+            linkLabel3.Name = "linkLabel3";
+            linkLabel3.Size = new Size(257, 15);
+            linkLabel3.TabIndex = 8;
+            linkLabel3.TabStop = true;
+            linkLabel3.Text = "https://github.com/koronerap/GoodbyeAhmet";
+            linkLabel3.VisitedLinkColor = Color.Blue;
+            // 
             // About
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(481, 182);
+            ClientSize = new Size(481, 221);
             Controls.Add(label4);
+            Controls.Add(linkLabel3);
+            Controls.Add(label5);
             Controls.Add(linkLabel2);
             Controls.Add(label3);
             Controls.Add(linkLabel1);
@@ -136,5 +163,7 @@
         private Label label3;
         private LinkLabel linkLabel2;
         private Label label4;
+        private Label label5;
+        private LinkLabel linkLabel3;
     }
 }
