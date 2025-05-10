@@ -167,11 +167,11 @@ namespace GoodbyeAhmet
         {
             KillProcesses();
 
-            WindowState = FormWindowState.Maximized;
-            ShowInTaskbar = true;
 
             Show();
             launchButton.Enabled = true;
+            WindowState = FormWindowState.Normal;
+            ShowInTaskbar = true;
         }
 
         private void aboutButton_Click(object sender, EventArgs e)
