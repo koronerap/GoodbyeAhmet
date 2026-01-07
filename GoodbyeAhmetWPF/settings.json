@@ -1,0 +1,9 @@
+{
+  "Modeset": "-5",
+  "TTL": "",
+  "V4Address": "77.88.8.8",
+  "V4Port": "1253",
+  "V6Address": "2a02:6b8::feed:0ff",
+  "V6Port": "1253",
+  "LaunchOnStart": false
+}

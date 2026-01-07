@@ -1,0 +1,310 @@
+<Window x:Class="GoodbyeAhmetWPF.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoodbyeAhmetWPF"
+        mc:Ignorable="d"
+        Title="Settings"
+        SizeToContent="Height"
+        Width="420"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource WindowBackgroundBrush}">
+
+        <Window.Resources>
+                <!-- Custom ComboBox Style -->
+                <Style x:Key="DarkComboBoxStyle"
+                       TargetType="ComboBox">
+                        <Setter Property="Background"
+                                Value="{StaticResource ControlBackgroundBrush}"/>
+                        <Setter Property="Foreground"
+                                Value="{StaticResource TextPrimaryBrush}"/>
+                        <Setter Property="BorderBrush"
+                                Value="{StaticResource BorderBrush}"/>
+                        <Setter Property="BorderThickness"
+                                Value="1"/>
+                        <Setter Property="Padding"
+                                Value="10,0"/>
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="ComboBox">
+                                                <Grid>
+                                                        <!-- Full Size ToggleButton -->
+                                                        <ToggleButton Focusable="False"
+                                                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                      ClickMode="Press"
+                                                                      Background="{TemplateBinding Background}"
+                                                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                                                      BorderThickness="{TemplateBinding BorderThickness}">
+                                                                <ToggleButton.Template>
+                                                                        <ControlTemplate TargetType="ToggleButton">
+                                                                                <Border Background="{TemplateBinding Background}"
+                                                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                        CornerRadius="4">
+                                                                                        <Grid>
+                                                                                                <Grid.ColumnDefinitions>
+                                                                                                        <ColumnDefinition Width="*"/>
+                                                                                                        <ColumnDefinition Width="40"/>
+                                                                                                </Grid.ColumnDefinitions>
+                                                                                                <Path Grid.Column="1"
+                                                                                                      Data="M7,10L12,15L17,10H7Z"
+                                                                                                      Fill="#B0B0B0"
+                                                                                                      HorizontalAlignment="Center"
+                                                                                                      VerticalAlignment="Center"/>
+                                                                                        </Grid>
+                                                                                </Border>
+                                                                        </ControlTemplate>
+                                                                </ToggleButton.Template>
+                                                        </ToggleButton>
+
+                                                        <!-- Content Overlaid (Non-Interactive) -->
+                                                        <ContentPresenter IsHitTestVisible="False"
+                                                                          Content="{TemplateBinding SelectionBoxItem}"
+                                                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                                          VerticalAlignment="Center"
+                                                                          HorizontalAlignment="Left"
+                                                                          Margin="{TemplateBinding Padding}"/>
+
+                                                        <!-- Popup -->
+                                                        <Popup x:Name="Popup"
+                                                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                                                               Placement="Bottom"
+                                                               AllowsTransparency="True"
+                                                               Focusable="False"
+                                                               PopupAnimation="Slide">
+                                                                <Border x:Name="DropDownBorder"
+                                                                        Background="{StaticResource ControlBackgroundBrush}"
+                                                                        BorderBrush="{StaticResource BorderBrush}"
+                                                                        BorderThickness="1"
+                                                                        MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                                                        MinWidth="{TemplateBinding ActualWidth}">
+                                                                        <ScrollViewer Margin="0"
+                                                                                      SnapsToDevicePixels="True">
+                                                                                <StackPanel IsItemsHost="True"
+                                                                                            KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                                                        </ScrollViewer>
+                                                                </Border>
+                                                        </Popup>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="HasItems"
+                                                                 Value="false">
+                                                                <Setter TargetName="DropDownBorder"
+                                                                        Property="MinHeight"
+                                                                        Value="95"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsGrouping"
+                                                                 Value="true">
+                                                                <Setter Property="ScrollViewer.CanContentScroll"
+                                                                        Value="false"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+
+                <!-- ComboBoxItem Style -->
+                <Style TargetType="ComboBoxItem">
+                        <Setter Property="Foreground"
+                                Value="{StaticResource TextPrimaryBrush}"/>
+                        <Setter Property="Background"
+                                Value="Transparent"/>
+                        <Setter Property="Padding"
+                                Value="10,8"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="ComboBoxItem">
+                                                <Border x:Name="Bd"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderThickness="0"
+                                                        Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Left"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                                <Setter TargetName="Bd"
+                                                                        Property="Background"
+                                                                        Value="#1E90FF"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsSelected"
+                                                                 Value="True">
+                                                                <Setter TargetName="Bd"
+                                                                        Property="Background"
+                                                                        Value="{StaticResource PrimaryBrush}"/>
+                                                                <Setter Property="Foreground"
+                                                                        Value="White"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+
+                <!-- TextBox Style adjustment for height -->
+                <Style TargetType="TextBox">
+                        <Setter Property="Height"
+                                Value="38"/>
+                        <!-- Increased height -->
+                        <Setter Property="Background"
+                                Value="#252525"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="Padding"
+                                Value="5,0"/>
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="TextBox">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="4"
+                                                        Padding="{TemplateBinding Padding}">
+                                                        <ScrollViewer x:Name="PART_ContentHost"/>
+                                                </Border>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+
+        </Window.Resources>
+
+        <Grid Margin="25">
+                <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0"
+                            Margin="0,0,0,25">
+                        <TextBlock Text="Configuration"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource PrimaryBrush}"
+                                   Margin="0,0,0,5"/>
+                        <TextBlock Text="Adjust connection parameters"
+                                   FontSize="14"
+                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                </StackPanel>
+
+                <!-- Main Form Area - No ScrollViewer needed if we size correctly, but Grid.Row=1 takes available space -->
+                <StackPanel Grid.Row="1">
+
+                        <!-- Preset Selection -->
+                        <TextBlock Text="PRESET MODE"
+                                   FontSize="11"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   Margin="0,0,0,8"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="PresetLabel_Click"/>
+                        <ComboBox x:Name="PresetComboBox"
+                                  ItemsSource="{Binding Presets}"
+                                  SelectedItem="{Binding SelectedPreset}"
+                                  DisplayMemberPath="Name"
+                                  Height="45"
+                                  Style="{StaticResource DarkComboBoxStyle}"
+                                  Margin="0,0,0,30"
+                                  IsEnabled="{Binding IsRunning, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+
+                        <!-- Manual Config Header -->
+                        <TextBlock Text="ADVANCED PARAMETERS"
+                                   FontSize="11"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   Margin="0,0,0,15"/>
+
+                        <Grid>
+                                <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="15"/>
+                                        <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Left Column -->
+                                <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Modeset"
+                                                   Margin="0,0,0,6"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        <TextBox Text="{Binding Settings.Modeset, UpdateSourceTrigger=PropertyChanged}"
+                                                 Margin="0,0,0,15"/>
+
+                                        <TextBlock Text="DNS v4 Address"
+                                                   Margin="0,0,0,6"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        <TextBox Text="{Binding Settings.V4Address, UpdateSourceTrigger=PropertyChanged}"
+                                                 Margin="0,0,0,15"/>
+
+                                        <TextBlock Text="DNS v6 Address"
+                                                   Margin="0,0,0,6"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        <TextBox Text="{Binding Settings.V6Address, UpdateSourceTrigger=PropertyChanged}"
+                                                 Margin="0,0,0,15"/>
+                                </StackPanel>
+
+                                <!-- Right Column -->
+                                <StackPanel Grid.Column="2">
+                                        <TextBlock Text="TTL"
+                                                   Margin="0,0,0,6"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        <TextBox Text="{Binding Settings.TTL, UpdateSourceTrigger=PropertyChanged}"
+                                                 Margin="0,0,0,15"/>
+
+                                        <TextBlock Text="DNS v4 Port"
+                                                   Margin="0,0,0,6"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        <TextBox Text="{Binding Settings.V4Port, UpdateSourceTrigger=PropertyChanged}"
+                                                 Margin="0,0,0,15"/>
+
+                                        <TextBlock Text="DNS v6 Port"
+                                                   Margin="0,0,0,6"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        <TextBox Text="{Binding Settings.V6Port, UpdateSourceTrigger=PropertyChanged}"
+                                                 Margin="0,0,0,15"/>
+                                </StackPanel>
+                        </Grid>
+
+                        <CheckBox IsChecked="{Binding Settings.LaunchOnStart}"
+                                  Content="Launch on System Startup"
+                                  Margin="0,10,0,0">
+                                <CheckBox.LayoutTransform>
+                                        <ScaleTransform ScaleX="1.1"
+                                                        ScaleY="1.1"/>
+                                </CheckBox.LayoutTransform>
+                        </CheckBox>
+                </StackPanel>
+
+                <!-- Bottom Actions -->
+                <UniformGrid Grid.Row="2"
+                             Columns="2"
+                             Rows="1"
+                             Margin="0,20,0,0">
+                        <Button Command="{Binding ResetSettingsCommand}"
+                                Content="Reset"
+                                Style="{StaticResource SecondaryButton}"
+                                Margin="0,0,8,0"
+                                Height="45"/>
+                        <Button Command="{Binding SaveSettingsCommand}"
+                                Content="Save Changes"
+                                Margin="8,0,0,0"
+                                Height="45">
+                                <Button.Effect>
+                                        <DropShadowEffect Color="{StaticResource PrimaryColor}"
+                                                          BlurRadius="10"
+                                                          ShadowDepth="0"
+                                                          Opacity="0.3"/>
+                                </Button.Effect>
+                        </Button>
+                </UniformGrid>
+        </Grid>
+</Window>

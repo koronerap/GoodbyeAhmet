@@ -1,0 +1,346 @@
+﻿<Window x:Class="GoodbyeAhmetWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoodbyeAhmetWPF"
+        xmlns:vm="clr-namespace:GoodbyeAhmetWPF.ViewModels"
+        mc:Ignorable="d"
+        Title="Goodbye Ahmet"
+        Height="500"
+        Width="350"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource WindowBackgroundBrush}">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <!-- Custom Style for the Toggle Button -->
+    <Window.Resources>
+        <Style x:Key="BigToggleButtonStyle"
+               TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <!-- Icon -->
+                        <!-- Defined Grid.Resources for brushes earlier, now using them explicitly -->
+                        <Grid>
+                            <Grid.Resources>
+                                <!-- Mutable Brushes for Animation -->
+                                <SolidColorBrush x:Key="MutableIconBrush"
+                                                 Color="#B0B0B0"/>
+                                <SolidColorBrush x:Key="MutableRingBrush"
+                                                 Color="#B0B0B0"/>
+                            </Grid.Resources>
+                            <!-- Rotating Container Grid -->
+                            <Grid x:Name="RotationContainer"
+                                  Width="170"
+                                  Height="170"
+                                  RenderTransformOrigin="0.5,0.5">
+                                <Grid.RenderTransform>
+                                    <RotateTransform Angle="0"/>
+                                </Grid.RenderTransform>
+
+                                <!-- Halo Ring (Extra Glow Layer) -->
+                                <Ellipse x:Name="HaloRing"
+                                         Width="160"
+                                         Height="160"
+                                         StrokeThickness="4"
+                                         Stroke="{StaticResource PrimaryBrush}"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         Opacity="0">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect x:Name="HaloEffect"
+                                                          Color="{StaticResource PrimaryColor}"
+                                                          BlurRadius="0"
+                                                          ShadowDepth="0"
+                                                          Opacity="0"/>
+                                    </Ellipse.Effect>
+                                </Ellipse>
+
+                                <!-- Outer Ring -->
+                                <Ellipse x:Name="OuterRing"
+                                         Width="160"
+                                         Height="160"
+                                         StrokeThickness="4"
+                                         Stroke="{StaticResource MutableRingBrush}"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center">
+                                    <Ellipse.Effect>
+                                        <!-- Stronger Glow Effect -->
+                                        <DropShadowEffect x:Name="GlowEffect"
+                                                          Color="{StaticResource PrimaryColor}"
+                                                          BlurRadius="0"
+                                                          ShadowDepth="0"
+                                                          Opacity="0"/>
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                            </Grid>
+
+                            <!-- Inner Circle (Static Background) -->
+                            <Ellipse x:Name="InnerCircle"
+                                     Fill="{StaticResource OffBrush}"
+                                     Width="140"
+                                     Height="140"/>
+
+                            <!-- Active Circle (Animated Expansion) -->
+                            <Ellipse x:Name="ActiveCircle"
+                                     Fill="{StaticResource PrimaryBrush}"
+                                     Width="140"
+                                     Height="140"
+                                     RenderTransformOrigin="0.5,0.5">
+                                <Ellipse.RenderTransform>
+                                    <ScaleTransform x:Name="ActiveCircleScale"
+                                                    ScaleX="0"
+                                                    ScaleY="0"/>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+
+                            <Path x:Name="PowerIcon"
+                                  Data="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M11,6V16H13V6H11Z"
+                                  Fill="{StaticResource MutableIconBrush}"
+                                  Stretch="Uniform"
+                                  Width="60"
+                                  Height="60"/>
+                        </Grid>
+
+                        <!-- Fix for Path Fill to allow animation -->
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="StartAnimation">
+                                <!-- 1. Scale Up Blue Circle -->
+                                <DoubleAnimation Storyboard.TargetName="ActiveCircleScale"
+                                                 Storyboard.TargetProperty="ScaleX"
+                                                 To="1"
+                                                 Duration="0:0:0.4">
+                                    <DoubleAnimation.EasingFunction>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="ActiveCircleScale"
+                                                 Storyboard.TargetProperty="ScaleY"
+                                                 To="1"
+                                                 Duration="0:0:0.4">
+                                    <DoubleAnimation.EasingFunction>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+
+                                <!-- 2. Fade In Glows (Dual Layer for Intensity) -->
+                                <!-- Base Glow -->
+                                <DoubleAnimation Storyboard.TargetName="GlowEffect"
+                                                 Storyboard.TargetProperty="BlurRadius"
+                                                 To="100"
+                                                 Duration="0:0:0.5"/>
+                                <!-- Halo Glow -->
+                                <DoubleAnimation Storyboard.TargetName="HaloRing"
+                                                 Storyboard.TargetProperty="Opacity"
+                                                 To="1"
+                                                 Duration="0:0:0.5"/>
+                                <DoubleAnimation Storyboard.TargetName="HaloEffect"
+                                                 Storyboard.TargetProperty="BlurRadius"
+                                                 To="120"
+                                                 Duration="0:0:0.5"/>
+
+                                <!-- 3. Rotate Container (Loop) -->
+                                <DoubleAnimation Storyboard.TargetName="RotationContainer"
+                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                                 From="0"
+                                                 To="360"
+                                                 Duration="0:0:2"
+                                                 RepeatBehavior="Forever"/>
+
+                                <!-- 4. Pulse Glows (Loop) -->
+                                <!-- Base Pulse -->
+                                <DoubleAnimation Storyboard.TargetName="GlowEffect"
+                                                 Storyboard.TargetProperty="Opacity"
+                                                 From="0.8"
+                                                 To="1.0"
+                                                 Duration="0:0:1.5"
+                                                 AutoReverse="True"
+                                                 RepeatBehavior="Forever"/>
+                                <!-- Halo Pulse (Creating breathing effect) -->
+                                <DoubleAnimation Storyboard.TargetName="HaloEffect"
+                                                 Storyboard.TargetProperty="Opacity"
+                                                 From="0.5"
+                                                 To="1.0"
+                                                 Duration="0:0:1.5"
+                                                 AutoReverse="True"
+                                                 RepeatBehavior="Forever"/>
+
+                                <!-- 5. Color Transitions -->
+                                <ColorAnimation Storyboard.TargetName="PowerIcon"
+                                                Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                                To="White"
+                                                Duration="0:0:0.3"/>
+                                <ColorAnimation Storyboard.TargetName="OuterRing"
+                                                Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)"
+                                                To="{StaticResource PrimaryColor}"
+                                                Duration="0:0:0.3"/>
+                            </Storyboard>
+
+                            <Storyboard x:Key="StopAnimation">
+                                <!-- 1. Scale Down Blue Circle -->
+                                <DoubleAnimation Storyboard.TargetName="ActiveCircleScale"
+                                                 Storyboard.TargetProperty="ScaleX"
+                                                 To="0"
+                                                 Duration="0:0:0.4">
+                                    <DoubleAnimation.EasingFunction>
+                                        <CubicEase EasingMode="EaseIn"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="ActiveCircleScale"
+                                                 Storyboard.TargetProperty="ScaleY"
+                                                 To="0"
+                                                 Duration="0:0:0.4">
+                                    <DoubleAnimation.EasingFunction>
+                                        <CubicEase EasingMode="EaseIn"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+
+                                <!-- 2. Fade Out Glows -->
+                                <DoubleAnimation Storyboard.TargetName="GlowEffect"
+                                                 Storyboard.TargetProperty="BlurRadius"
+                                                 To="0"
+                                                 Duration="0:0:0.5"/>
+                                <DoubleAnimation Storyboard.TargetName="HaloRing"
+                                                 Storyboard.TargetProperty="Opacity"
+                                                 To="0"
+                                                 Duration="0:0:0.5"/>
+                                <DoubleAnimation Storyboard.TargetName="HaloEffect"
+                                                 Storyboard.TargetProperty="BlurRadius"
+                                                 To="0"
+                                                 Duration="0:0:0.5"/>
+
+                                <!-- 3. Reset Colors -->
+                                <ColorAnimation Storyboard.TargetName="PowerIcon"
+                                                Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                                To="#B0B0B0"
+                                                Duration="0:0:0.3"/>
+                                <ColorAnimation Storyboard.TargetName="OuterRing"
+                                                Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)"
+                                                To="#B0B0B0"
+                                                Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsRunning}"
+                                         Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource StartAnimation}"
+                                                     x:Name="StartSB"/>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="StartSB"/>
+                                    <BeginStoryboard Storyboard="{StaticResource StopAnimation}"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <!-- Static Initial Colors (To ensure they match animation Start/End) -->
+                            <!-- We use inline brushes effectively in the elements below -->
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Header -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0"
+                        VerticalAlignment="Center">
+                <TextBlock Text="Goodbye Ahmet"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource PrimaryBrush}"/>
+                <TextBlock Text="DPI Security"
+                           FontSize="12"
+                           Foreground="{StaticResource TextSecondaryBrush}"/>
+            </StackPanel>
+
+            <!-- Settings Button (Gear Icon) -->
+            <Button Grid.Column="1"
+                    Click="OpenSettings"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Cursor="Hand">
+                <Path Data="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"
+                      Fill="{StaticResource PrimaryBrush}"
+                      Stretch="Uniform"
+                      Width="24"
+                      Height="24"/>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="Transparent">
+                                        <ContentPresenter/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+
+        <!-- Big Center Toggle -->
+        <Grid Grid.Row="1"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center">
+            <Button Command="{Binding ToggleCommand}"
+                    Style="{StaticResource BigToggleButtonStyle}"
+                    Width="170"
+                    Height="170"
+                    Cursor="Hand"/>
+        </Grid>
+
+        <!-- Status Footer -->
+        <StackPanel Grid.Row="2"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,0,20">
+            <TextBlock FontSize="18"
+                       FontWeight="SemiBold"
+                       TextAlignment="Center">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Text"
+                                Value="DISCONNECTED"/>
+                        <Setter Property="Foreground"
+                                Value="{StaticResource TextSecondaryBrush}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRunning}"
+                                         Value="True">
+                                <Setter Property="Text"
+                                        Value="CONNECTED"/>
+                                <Setter Property="Foreground"
+                                        Value="{StaticResource PrimaryBrush}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <TextBlock Text="{Binding SelectedPreset.Name, StringFormat='Using: {0}'}"
+                       FontSize="12"
+                       Foreground="{StaticResource TextSecondaryBrush}"
+                       HorizontalAlignment="Center"
+                       Margin="0,5,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>

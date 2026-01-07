@@ -18,3 +18,16 @@ C:\Users\Ahmet\source\repos\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.A
 C:\Users\Ahmet\source\repos\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.Main.resources
 C:\Users\Ahmet\source\repos\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.sourcelink.json
 C:\Users\Ahmet\source\repos\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.ConnectionSettings.resources
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.About.resources
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.ConnectionSettings.resources
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.Main.resources
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.Properties.Resources.resources
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.csproj.GenerateResource.cache
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.GeneratedMSBuildEditorConfig.editorconfig
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.AssemblyInfoInputs.cache
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.AssemblyInfo.cs
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.csproj.CoreCompileInputs.cache
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.sourcelink.json
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.dll
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\refint\GoodbyeAhmet.dll
+D:\GitHub\GoodbyeAhmet\obj\Debug\net8.0-windows\GoodbyeAhmet.pdb
