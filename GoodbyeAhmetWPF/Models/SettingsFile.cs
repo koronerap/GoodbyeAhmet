@@ -55,6 +55,20 @@ namespace GoodbyeAhmetWPF.Models
             set { _launchOnStart = value; OnPropertyChanged(); }
         }
 
+        private bool _activateOnStart = false;
+        public bool ActivateOnStart
+        {
+            get => _activateOnStart;
+            set { _activateOnStart = value; OnPropertyChanged(); }
+        }
+
+        private string _language = "en-US";
+        public string Language
+        {
+            get => _language;
+            set { _language = value; OnPropertyChanged(); }
+        }
+
         public SettingsFile()
         {
             // Default initialization if needed

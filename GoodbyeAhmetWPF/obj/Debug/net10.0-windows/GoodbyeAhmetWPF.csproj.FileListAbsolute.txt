@@ -37,3 +37,13 @@ D:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\obj\Debug\net10.0-windows\ref\GoodbyeAhme
 D:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\obj\Debug\net10.0-windows\Resources\DarkTheme.baml
 D:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\obj\Debug\net10.0-windows\SettingsWindow.g.cs
 D:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\obj\Debug\net10.0-windows\SettingsWindow.baml
+d:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\bin\Debug\net10.0-windows\local\en-US.json
+d:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\bin\Debug\net10.0-windows\local\tr-TR.json
+D:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\bin\Debug\net10.0-windows\local\de-DE.json
+D:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\bin\Debug\net10.0-windows\local\el-GR.json
+D:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\bin\Debug\net10.0-windows\local\es-ES.json
+D:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\bin\Debug\net10.0-windows\local\fr-FR.json
+D:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\bin\Debug\net10.0-windows\local\pt-PT.json
+D:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\bin\Debug\net10.0-windows\local\ru-RU.json
+D:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\bin\Debug\net10.0-windows\local\zh-CN.json
+D:\GitHub\GoodbyeAhmet\GoodbyeAhmetWPF\bin\Debug\net10.0-windows\local\zh-TW.json

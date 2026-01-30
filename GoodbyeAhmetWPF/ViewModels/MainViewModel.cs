@@ -25,9 +25,19 @@ namespace GoodbyeAhmetWPF.ViewModels
 
             Presets = new ObservableCollection<Preset>(PresetService.GetPresets());
 
-            // Try to match current settings to a preset, or default to first
-            // This is a simplification; in reality we might want to check values matches
-            SelectedPreset = Presets.FirstOrDefault();
+            // Try to match current settings to a preset
+            var matchingPreset = Presets.FirstOrDefault(p =>
+                p.Modeset == _settings.Modeset &&
+                p.TTL == _settings.TTL &&
+                p.DNSV4Address == _settings.V4Address &&
+                p.DNSV4Port == _settings.V4Port &&
+                p.DNSV6Address == _settings.V6Address &&
+                p.DNSV6Port == _settings.V6Port);
+
+            if (matchingPreset != null)
+            {
+                SelectedPreset = matchingPreset;
+            }
 
             StartCommand = new RelayCommand(Start, CanStart);
             StopCommand = new RelayCommand(Stop, CanStop);
@@ -35,12 +45,13 @@ namespace GoodbyeAhmetWPF.ViewModels
             SaveSettingsCommand = new RelayCommand(SaveSettings);
             ResetSettingsCommand = new RelayCommand(ResetSettings);
             ApplyPresetCommand = new RelayCommand(ApplyPreset);
+            AboutCommand = new RelayCommand(ShowAbout);
 
-            if (_settings.LaunchOnStart)
+            // Initialize Language
+            LocalizationService.Instance.CurrentLanguage = _settings.Language;
+
+            if (_settings.ActivateOnStart)
             {
-                // Logic handled in View for minimizing, but we can start service here if desired
-                // Though typically UI events drive this to allow main window to show first if needed
-                // or hide immediately.
                 Start(null);
             }
         }
@@ -50,6 +61,29 @@ namespace GoodbyeAhmetWPF.ViewModels
             get => _settings;
             set => SetProperty(ref _settings, value);
         }
+
+        public string SelectedLanguage
+        {
+            get => _settings.Language;
+            set
+            {
+                if (_settings.Language != value)
+                {
+                    _settings.Language = value;
+                    LocalizationService.Instance.CurrentLanguage = value;
+
+                    // Force UI update for Settings since it holds the language value too
+                    // though usually the ComboBox updates the source.
+                    OnPropertyChanged();
+
+                    // Also save immediately? Or wait for save button.
+                    // User usually expects language change to persist or apply immediately.
+                    // We'll let Save button handle persistence, but apply immediately.
+                }
+            }
+        }
+
+        public List<LanguageInfo> AvailableLanguages => LocalizationService.Instance.AvailableLanguages;
 
         public ObservableCollection<Preset> Presets { get; }
 
@@ -87,6 +121,7 @@ namespace GoodbyeAhmetWPF.ViewModels
         public ICommand SaveSettingsCommand { get; }
         public ICommand ResetSettingsCommand { get; }
         public ICommand ApplyPresetCommand { get; }
+        public ICommand AboutCommand { get; }
 
         private bool CanStart(object? parameter) => !IsRunning;
 
@@ -97,7 +132,8 @@ namespace GoodbyeAhmetWPF.ViewModels
                 _goodbyeDpiService.Start(Settings);
                 IsRunning = true;
 
-                // Show notification (handled in view usually, or via a notification service)
+                // Show notification
+                NotificationService.Instance.ShowNotification("Goodbye Ahmet", LocalizationService.Instance["Connected"], System.Windows.Forms.ToolTipIcon.Info);
             }
             catch (Exception ex)
             {
@@ -120,6 +156,7 @@ namespace GoodbyeAhmetWPF.ViewModels
         {
             _goodbyeDpiService.Stop();
             IsRunning = false;
+            NotificationService.Instance.ShowNotification("Goodbye Ahmet", LocalizationService.Instance["Disconnected"], System.Windows.Forms.ToolTipIcon.Info);
         }
 
         private void SaveSettings(object? parameter)
@@ -134,7 +171,12 @@ namespace GoodbyeAhmetWPF.ViewModels
             _settingsService.Load(); // Re-load or reset
             Settings = _settingsService.Data;
             // In a real app we might want to deep copy or create new instance logic in service
-            MessageBox.Show("Settings reset.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(LocalizationService.Instance["SettingsReset"], "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ShowAbout(object? parameter)
+        {
+            MessageBox.Show(LocalizationService.Instance["AboutContent"], LocalizationService.Instance["About"], MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ApplyPreset(object? parameter)

@@ -1,4 +1,5 @@
 ﻿using GoodbyeAhmetWPF.ViewModels;
+using GoodbyeAhmetWPF.Services;
 using System.Windows;
 using System.ComponentModel;
 
@@ -6,45 +7,15 @@ namespace GoodbyeAhmetWPF;
 
 public partial class MainWindow : Window
 {
-    private System.Windows.Forms.NotifyIcon _notifyIcon;
-
     public MainWindow()
     {
         InitializeComponent();
 
-        _notifyIcon = new System.Windows.Forms.NotifyIcon();
-        try
-        {
-            var assembly = System.Reflection.Assembly.GetEntryAssembly();
-            if (assembly != null)
-            {
-                // Try to get icon, but don't crash if fails
-                // _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(assembly.Location);
-                // ExtractAssociatedIcon might fail for DLLs. Let's just use a default or try-catch.
-                // Better: Load from resource if available.
-                // For now, let's try a safer approach or just skip if it fails.
-                if (System.IO.File.Exists(assembly.Location))
-                    _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(assembly.Location);
-            }
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Trace.WriteLine($"Icon error: {ex.Message}");
-            // Fallback to a system icon or null (might not show)
-            _notifyIcon.Icon = System.Drawing.SystemIcons.Application;
-        }
-
-        if (_notifyIcon.Icon == null)
-            _notifyIcon.Icon = System.Drawing.SystemIcons.Application;
-
-        _notifyIcon.Visible = true;
-        _notifyIcon.Text = "Goodbye Ahmet";
-        _notifyIcon.DoubleClick += (s, args) => ShowWindow();
-
-        var contextMenu = new System.Windows.Forms.ContextMenuStrip();
-        contextMenu.Items.Add("Show", null, (s, e) => ShowWindow());
-        contextMenu.Items.Add("Exit", null, (s, e) => CloseApp());
-        _notifyIcon.ContextMenuStrip = contextMenu;
+        // Setup Notification Icon via Service
+        var notifyService = NotificationService.Instance;
+        notifyService.SetDoubleClickAction(ShowWindow);
+        notifyService.AddContextMenuItem("Show", ShowWindow);
+        notifyService.AddContextMenuItem("Exit", CloseApp);
 
         Loaded += MainWindow_Loaded;
         Closing += MainWindow_Closing;
@@ -69,7 +40,7 @@ public partial class MainWindow : Window
                 {
                     // Already started in VM constructor if logic placed there, 
                     // but good to ensure or show balloon tip.
-                    _notifyIcon.ShowBalloonTip(3000, "Goodbye Ahmet", "Running in background", System.Windows.Forms.ToolTipIcon.Info);
+                    NotificationService.Instance.ShowNotification("Goodbye Ahmet", LocalizationService.Instance["RunningInBackground"]);
                 }
             }
         }
@@ -91,7 +62,7 @@ public partial class MainWindow : Window
         {
             vm.Cleanup();
         }
-        _notifyIcon.Dispose();
+        NotificationService.Instance.Dispose();
     }
 
     private void ShowWindow()

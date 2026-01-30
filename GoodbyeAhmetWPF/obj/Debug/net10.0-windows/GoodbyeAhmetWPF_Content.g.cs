@@ -18,6 +18,16 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("essentials/goodbyedpi/x86_64/goodbyedpi.exe")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("essentials/goodbyedpi/x86_64/windivert.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("essentials/goodbyedpi/x86_64/windivert64.sys")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("local/de-de.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("local/el-gr.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("local/en-us.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("local/es-es.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("local/fr-fr.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("local/pt-pt.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("local/ru-ru.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("local/tr-tr.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("local/zh-cn.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("local/zh-tw.json")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("favicon.ico")]
 
 

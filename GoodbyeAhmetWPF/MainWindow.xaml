@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GoodbyeAhmetWPF"
         xmlns:vm="clr-namespace:GoodbyeAhmetWPF.ViewModels"
+        xmlns:converters="clr-namespace:GoodbyeAhmetWPF.Converters"
         mc:Ignorable="d"
         Title="Goodbye Ahmet"
         Height="500"
@@ -17,8 +18,11 @@
         <vm:MainViewModel/>
     </Window.DataContext>
 
-    <!-- Custom Style for the Toggle Button -->
     <Window.Resources>
+        <!-- Converters -->
+        <converters:StringFormatConverter x:Key="StringFormatConverter"/>
+
+        <!-- Custom Style for the Toggle Button -->
         <Style x:Key="BigToggleButtonStyle"
                TargetType="Button">
             <Setter Property="Template">
@@ -273,31 +277,61 @@
                            Foreground="{StaticResource TextSecondaryBrush}"/>
             </StackPanel>
 
-            <!-- Settings Button (Gear Icon) -->
-            <Button Grid.Column="1"
-                    Click="OpenSettings"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Cursor="Hand">
-                <Path Data="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"
-                      Fill="{StaticResource PrimaryBrush}"
-                      Stretch="Uniform"
-                      Width="24"
-                      Height="24"/>
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="Transparent">
-                                        <ContentPresenter/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Button.Style>
-            </Button>
+            <!-- Toolbar -->
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal">
+                <!-- About Button -->
+                <Button Command="{Binding AboutCommand}"
+                        Background="Transparent"
+                        Margin="0,0,10,0"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        ToolTip="{Binding Source={x:Static local:Services.LocalizationService.Instance}, Path=[About]}">
+                    <Path Data="M11,9H13V7H11M11,20H13V11H11M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
+                          Fill="{StaticResource PrimaryBrush}"
+                          Stretch="Uniform"
+                          Width="24"
+                          Height="24"/>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="Transparent">
+                                            <ContentPresenter/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <!-- Settings Button (Gear Icon) -->
+                <Button Click="OpenSettings"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Cursor="Hand">
+                    <Path Data="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"
+                          Fill="{StaticResource PrimaryBrush}"
+                          Stretch="Uniform"
+                          Width="24"
+                          Height="24"/>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="Transparent">
+                                            <ContentPresenter/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
         </Grid>
 
         <!-- Big Center Toggle -->
@@ -321,14 +355,14 @@
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Setter Property="Text"
-                                Value="DISCONNECTED"/>
+                                Value="{Binding Source={x:Static local:Services.LocalizationService.Instance}, Path=[Disconnected]}"/>
                         <Setter Property="Foreground"
                                 Value="{StaticResource TextSecondaryBrush}"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsRunning}"
                                          Value="True">
                                 <Setter Property="Text"
-                                        Value="CONNECTED"/>
+                                        Value="{Binding Source={x:Static local:Services.LocalizationService.Instance}, Path=[Connected]}"/>
                                 <Setter Property="Foreground"
                                         Value="{StaticResource PrimaryBrush}"/>
                             </DataTrigger>
@@ -336,11 +370,18 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <TextBlock Text="{Binding SelectedPreset.Name, StringFormat='Using: {0}'}"
-                       FontSize="12"
+            <TextBlock FontSize="12"
                        Foreground="{StaticResource TextSecondaryBrush}"
                        HorizontalAlignment="Center"
-                       Margin="0,5,0,0"/>
+                       Margin="0,5,0,0">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                        <Binding Source="{x:Static local:Services.LocalizationService.Instance}"
+                                 Path="[Using]"/>
+                        <Binding Path="SelectedPreset.Name"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
         </StackPanel>
     </Grid>
 </Window>
